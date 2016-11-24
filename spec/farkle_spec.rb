@@ -1,5 +1,7 @@
 require('rspec')
 require('pry')
+require('pry-nav')
+
 require "farkle"
 
 describe('Array#score') do
