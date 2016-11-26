@@ -1,0 +1,42 @@
+<form action="/index">
+  <div class="row gameboard">
+    <div class="col-sm-6 play">
+      <div class="active-dice">
+        <h3>Active Dice: </h3><span id="active_dice_array"><%= active_dice %></span>
+        <label for="select-dice"></label>
+        <div class="radio">
+          <label>
+            <input type="radio" name="active_cards" id="active_cards" value="0" checked>Card 0
+          </label>
+          <label>
+            <input type="radio" name="active_cards" id="active_cards" value="1" checked>Card 1
+          </label>
+          <label>
+            <input type="radio" name="active_cards" id="active_cards" value="2" checked>Card 2
+          </label>
+          <label>
+            <input type="radio" name="active_cards" id="active_cards" value="3" checked>Card 3
+          </label>
+          <label>
+            <input type="radio" name="active_cards" id="active_cards" value="4" checked>Card 4
+          </label>
+        </div>
+      </div>
+      <div class="frozen-dice">
+        <h3>Frozen Dice: </h3><span id="frozen_dice_array"></span>
+      </div>
+    </div>
+    <div class="col-sm-6 scoring">
+      <div class="score">
+        <h3>Frozen Score in Hand: </h3><span id="frozen_dice_score"></span>
+      </div>
+      <div class="bank">
+        <h3>Banked Score: </h3><span id="banked_score"></span>
+      </div>
+      <div class="Strikes">
+        <h3>Strikes: </h3><span id="strikes"></span>
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-lg">Go!</button>
+</form>

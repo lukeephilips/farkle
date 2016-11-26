@@ -1,53 +1,30 @@
-# d1 = 0
-# d2 = 0
-# d3 = 2
-# d4 = 2
-# d5 = 3
-# d6 = 6
-# output = ""
-
-
 class Array
-  # def initialize(active_dice, frozen_dice, strikes, bank)
-  #   active_dice = active_dice
-  #   frozen_dice = frozen_dice
-  #   strikes = strikes
-  #   bank = bank
-  #   binding.pry
+  # define_method(:initialize)
+  #   @active_dice = [0,0,0,0,0]
+  #   @frozen_dice = []
+  #   @strikes = 0
+  #   @bank = 0
   # end
-    active_dice = [0,0,0,0,0]
-    frozen_dice = []
-    strikes = 0
-    bank = 0
+
+  active_dice = [0,0,0,0,0]
+  frozen_dice = []
+  strikes = 0
+  bank = 0
 
   define_method(:score) do
     score = 0
-# triples
-    [2,3,4,6].each do |n|
+    [1..6].each do |n|
       if self.count(n) >= 3
-        score += (n * 100)
-        if self.count(n) > 3
-          score += (self.count(n) - 3) * n * 50
+        if n.eql?(1)
+          score += (1000) + (self.count(n) - 3) * n * 500
+        else
+          score += (n * 100) + (self.count(n) - 3) * n * 50
         end
+      elsif n.eql?(1)
+        score += self.count(1)* 100
+      elsif n.eql?(5)
+        score += self.count(5)* 50
       end
-    end
-# ones
-    if self.count(1) >= 3
-      score += 1000
-      if self.count(1) > 3
-         score += (self.count(1) - 3) * 500
-       end
-    else
-      score += self.count(1)* 100
-    end
-#fives
-    if self.count(5) >= 3
-      score += 500
-      if self.count(1) > 3
-        score += (self.count(1) - 3) * 2500
-      end
-    elsif
-      score += self.count(5)* 50
     end
     score
   end
@@ -61,9 +38,9 @@ class Array
       frozen_dice.concat(self.select {|die| die == (self[n])})
       self.delete(self[n])
       "frozen score: " + frozen_dice.score.to_s + " active dice " + active_dice.to_s
-    elsif frozen_dice.include?(self[n])
-      frozen_dice.push(self.delete_at(n))
-      "frozen score: " + frozen_dice.score.to_s + " active dice " + active_dice.to_s
+    # elsif frozen_dice.include?(self[n])
+    #   frozen_dice.push(self.delete_at(n))
+    #   "frozen score: " + frozen_dice.score.to_s + " active dice " + active_dice.to_s
     else
       "you can't freeze non-scoring dice"
     end
