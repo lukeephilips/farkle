@@ -1,6 +1,5 @@
 @@player = nil;
 
-# attr_reader(:active_dice, :frozen_dice, :hand_score, :strikes, :bank, :message)
 class Farkle
   define_method(:initialize) do |active_dice|
     @active_dice = active_dice
@@ -10,25 +9,30 @@ class Farkle
     @banked = 0
     @turn_in_process = true
     @message = ''
-    # @active_dice.length.times do |i|
-    #   @active_dice[i] = rand(6) + 1
-    # end
   end
-  define_method(:create_player) do
-    @@player = self
-  end
+
   define_singleton_method(:active_player) do
     @@player
   end
   define_singleton_method(:end_turn) do
     @@player
   end
+
+  define_method(:create_player) do
+    @@player = self
+  end
+
   define_method(:turn_in_process) do
     @turn_in_process
   end
+
   define_method(:active_dice) do
     @active_dice
   end
+  define_method(:hand_score) do
+    @hand_score = score(@active_dice)
+  end
+
   define_method(:frozen_dice) do
     @frozen_dice
   end
@@ -36,9 +40,7 @@ class Farkle
   define_method(:frozen_score) do
     score(@frozen_dice)
   end
-  define_method(:hand_score) do
-    @hand_score = score(@active_dice)
-  end
+
 
   define_method(:strikes) do
     @strikes
@@ -49,6 +51,7 @@ class Farkle
   define_method(:message) do
     @message
   end
+
 
   define_method(:score) do |array|
     score = 0
@@ -80,9 +83,6 @@ class Farkle
       if @active_dice.length.eql?(0)
         @message = 'Hot dice! Roll Again!'
         @active_dice.fill(0,0,5)
-        # self.roll
-      # else
-      #   @frozen_dice
       end
     elsif n.eql? 1 or  n.eql? 5    #single one or five
       @message = 'you froze a ' + n.to_s
@@ -92,10 +92,6 @@ class Farkle
       if @active_dice.length.eql?(0)
         @message = 'Hot dice! Roll Again!'
         @active_dice.fill(0,0,5)
-        # self.roll
-      # else
-      #   @frozen_dice
-
       end
     else #non-scoring dice
       @message = "You can't freeze non-scoring dice"
@@ -132,12 +128,9 @@ class Farkle
   end
 
   define_method(:bank) do
-    binding.pry
     @banked += score(@frozen_dice)
-    @frozen_dice = []
-    @active_dice.fill(0,0,5)
     @message = 'You banked '+score(@frozen_dice).to_s + ' for a new bank of '+ @banked.to_s
+    @frozen_dice = []
     @turn_in_process = false
-    # self.roll
   end
 end

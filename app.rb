@@ -26,8 +26,8 @@ post '/' do
   method = params.fetch 'method'
   if method.eql? 'freeze'
     @player1.freeze(selection)
-  # elsif method.eql? 'bank'
-  #   @player1.bank
+  elsif method.eql? 'bank'
+    @player1.bank
   end
   erb :index
 end
