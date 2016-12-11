@@ -7,27 +7,34 @@ also_reload('lib/**/*.rb')
 
 
 get '/'  do
-  @player1 = Farkle.new [0,0,0,0,0]
-  @player1.create_player
-  @player1.roll
+
   erb :index
+end
+
+post '/farkle'  do
+players = params['player-count'].to_i
+players.times do
+  Farkle.new([0,0,0,0,0]).create_player
+  @player = Farkle.active_player[0]
+end
+  erb :farkle
 end
 
 get '/roll' do
-  @player1 = Farkle.active_player
-  @player1.roll
-  erb :index
+  @player = Farkle.active_player[0]
+  @player.roll
+  erb :farkle
 end
 
 post '/' do
-  @player1 = Farkle.active_player
+  @player = Farkle.active_player[0]
   selection = params['active_dice'].to_i
 
   method = params.fetch 'method'
   if method.eql? 'freeze'
-    @player1.freeze(selection)
+    @player.freeze(selection)
   elsif method.eql? 'bank'
-    @player1.bank
+    @player.bank
   end
-  erb :index
+  erb :farkle
 end

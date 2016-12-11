@@ -1,41 +1,37 @@
-<form action="/farkle">
+<form action="/" method="post">
   <div class="row gameboard">
     <div class="col-sm-6 play">
-      <div class="active-dice">
-        <h3>Active Dice: </h3><span id="active_dice_array"><%= @player1.active_dice %></span>
-        <label for="select-dice"></label>
-        <h3>Active Dice Score: </h3><span id="active_dice_score"><%= @player1.hand_score %></span>
-        <div class="radio">
-          <label>
-            <input type="radio" name="active_dice" id="active_dice" value="0" checked>Die 0
-          </label>
-          <label>
-            <input type="radio" name="active_dice" id="active_dice" value="1" checked>Die 1
-          </label>
-          <label>
-            <input type="radio" name="active_dice" id="active_dice" value="2" checked>Die 2
-          </label>
-          <label>
-            <input type="radio" name="active_dice" id="active_dice" value="3" checked>Die 3
-          </label>
-          <label>
-            <input type="radio" name="active_dice" id="active_dice" value="4" checked>Die 4
-          </label>
-        </div>
+      <div class="player">
+        <h2>Player: <%= @player.id %></h2>
       </div>
+      <div class="active-dice">
+        <% if @player.active_dice %>
+          <h3>Active Dice: </h3>
+          <% @player.active_dice.each.with_index do |die, index| %>
+            <label class="dice">
+              <input type="checkbox" name="active_dice" id="<%= index %>" value = "<%= die %>"><%= die %>
+            </label>
+          <% end %>
+          <h3>Active Dice Score: </h3>
+          <span id="active_dice_score"> <%= @player.score(@player.active_dice) %></span>
+        <% end %>
+      </div>
+
       <div class="frozen-dice">
-        <h3>Frozen Dice: </h3><span id="frozen_dice_array"><%= @player1.frozen_dice %></span>
+        <h3>Frozen Dice: </h3><span id="frozen_dice_array"><%= @player.frozen_dice %></span>
       </div>
     </div>
     <div class="col-sm-6 scoring">
       <div class="score">
-        <h3>Frozen Score in Hand: </h3><span id="frozen_dice_score">%= @player1.frozen_score %></span>
+        <h3>Frozen Score in Hand: </h3><span id="frozen_dice_score"><%=@player.score(@player.frozen_dice) %></span>
       </div>
-      <div class="bank">
-        <h3>Banked Score: </h3><span id="banked_score">%= @player1.banked_score%></span>
-      </div>
+        <div class="bank">
+          <% if @player.banked != (0) %>
+            <h3>Banked Score: </h3><span id="banked_score"><%= @player.banked %></span>
+          <% end %>
+        </div>
       <div class="Strikes">
-        <h3>Strikes: </h3><span id="strikes"><%= @strikes %></span>
+        <h3>Strikes: </h3><span id="strikes"><%= @player.strikes %></span>
       </div>
     </div>
   </div>
@@ -43,14 +39,17 @@
     <div class="col-sm-2">
       <div class="method">
         <select class="form-control" name="method">
-          <option value="roll">Roll</option>
           <option value="freeze">Freeze</option>
           <option value="bank">Bank</option>
         </select>
       </div>
     </div>
     <div class="col-sm-1">
-      <button type="submit" class="btn btn-danger">Go!</button>
+      <button type="submit" class="btn btn-success">Go!</button>
+      <a href="/roll"><button type="button" class="btn btn-danger">Roll</button></a>
+    </div>
+    <div class="message">
+      <h3 id="message"><%= @player.message %></h3>
     </div>
 </div>
 </form>

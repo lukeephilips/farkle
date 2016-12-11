@@ -5,3 +5,12 @@ body {
 #message {
   color: purple;
 }
+.dice{
+  color: black;
+  font-size: 48px;
+  font-weight: bolder;
+
+}
+/*.hidden {
+  opacity: 0;
+}*/

@@ -1,4 +1,4 @@
-@@player = nil;
+@@players = [];
 
 class Farkle
   define_method(:initialize) do |active_dice|
@@ -7,23 +7,37 @@ class Farkle
     @hand_score = 0
     @strikes = 0
     @banked = 0
-    @turn_in_process = true
+    @turn_status = 'can_roll'
     @message = ''
+    @id = @@players.count + 1
   end
 
+  # define_singleton_method(:change_player) do
+  #   @@players
+  # end
   define_singleton_method(:active_player) do
-    @@player
+    @@players
   end
-  define_singleton_method(:end_turn) do
-    @@player
+
+  define_singleton_method(:find) do |identifier|
+    found_player = nil
+    @@players.each do |player|
+      if player.id.eql?(identifier.to_i())
+        found_player = player
+      end
+    end
+      found_player
   end
 
   define_method(:create_player) do
-    @@player = self
+    @@players.push(self)
+  end
+  define_method(:id) do
+    @id
   end
 
-  define_method(:turn_in_process) do
-    @turn_in_process
+  define_method(:turn_status) do
+    @turn_status
   end
 
   define_method(:active_dice) do
@@ -84,6 +98,9 @@ class Farkle
         @message = 'Hot dice! Roll Again!'
         @active_dice.fill(0,0,5)
       end
+      @turn_status = 'can_roll'
+      # @message = ''
+
     elsif n.eql? 1 or  n.eql? 5    #single one or five
       @message = 'you froze a ' + n.to_s
 
@@ -93,6 +110,7 @@ class Farkle
         @message = 'Hot dice! Roll Again!'
         @active_dice.fill(0,0,5)
       end
+      @turn_status = 'can_roll'
     else #non-scoring dice
       @message = "You can't freeze non-scoring dice"
     end
@@ -100,30 +118,37 @@ class Farkle
 
   define_method(:roll) do
     @message = ''
-    if !@turn_in_process
+    if @turn_status == 'over'
       @active_dice.fill(0,0,5)
-      @turn_in_process = true
+      @turn_status = 'can_roll'
     end
-    @active_dice.length.times do |i|
-      @active_dice[i] = rand(6) + 1
-    end
-    if score(@active_dice) == 0
-      @strikes += 1
-      if @strikes == 3
-        @banked = 0
-        @strikes = 0
-        @frozen_dice = []
-        @message = 'Farkle'
-        @turn_in_process = false
+
+    if @turn_status == 'must_freeze_to_roll'
+      @message = 'Freeze at least one die to roll'
+    else
+      @active_dice.length.times do |i|
+        @active_dice[i] = rand(6) + 1
+      end
+
+      @turn_status = 'must_freeze_to_roll'
+      if score(@active_dice) == 0
+        @strikes += 1
+        if @strikes == 3
+          @banked = 0
+          @strikes = 0
+          @frozen_dice = []
+          @message = 'Farkle'
+          @turn_status = 'over'
+        else
+          @hand_score = 0
+          @frozen_dice = []
+          @message = 'Strike ' + @strikes.to_s
+          @turn_status = 'over'
+        end
       else
         @hand_score = 0
-        @frozen_dice = []
-        @message = 'Strike ' + @strikes.to_s
-        @turn_in_process = false
+        @active_dice
       end
-    else
-      @hand_score = 0
-      @active_dice
     end
   end
 
@@ -131,6 +156,6 @@ class Farkle
     @banked += score(@frozen_dice)
     @message = 'You banked '+score(@frozen_dice).to_s + ' for a new bank of '+ @banked.to_s
     @frozen_dice = []
-    @turn_in_process = false
+    @turn_status = 'over'
   end
 end
