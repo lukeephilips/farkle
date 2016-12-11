@@ -15,7 +15,6 @@ end
 
 get '/roll' do
   @player1 = Farkle.active_player
-  # binding.pry
   @player1.roll
   erb :index
 end
@@ -26,7 +25,7 @@ post '/' do
 
   method = params.fetch 'method'
   if method.eql? 'freeze'
-    @player1.freeze selection
+    @player1.freeze(selection)
   # elsif method.eql? 'bank'
   #   @player1.bank
   end

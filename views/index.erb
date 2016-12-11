@@ -13,9 +13,7 @@
           <span id="active_dice_score"> <%= @player1.score(@player1.active_dice) %></span>
         <% end %>
       </div>
-      <div class="message">
-        <h3 id="message"><%= @player1.message %></h3>
-      </div>
+
       <div class="frozen-dice">
         <h3>Frozen Dice: </h3><span id="frozen_dice_array"><%= @player1.frozen_dice %></span>
       </div>
@@ -46,6 +44,9 @@
     <div class="col-sm-1">
       <button type="submit" class="btn btn-success">Go!</button>
       <a href="/roll"><button type="button" class="btn btn-danger">Roll</button></a>
+    </div>
+    <div class="message">
+      <h3 id="message"><%= @player1.message %></h3>
     </div>
 </div>
 </form>
